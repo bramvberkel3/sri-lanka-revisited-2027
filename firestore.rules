@@ -1,0 +1,14 @@
+rules_version = '2';
+// Paste this into Firebase console → Firestore Database → Rules, replace the two
+// emails with yours, and click Publish. Only these two accounts can read or write.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isUs() {
+      return request.auth != null
+        && request.auth.token.email in ['YOUR_EMAIL@example.com', 'PARTNER_EMAIL@example.com'];
+    }
+    match /trips/{path=**} {
+      allow read, write: if isUs();
+    }
+  }
+}
